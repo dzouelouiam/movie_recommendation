@@ -6,3 +6,4 @@ class RoomForm(ModelForm):
         model = Room
         #include all the fields ( name, topic, description , body ...) in class Room ( models.py)
         fields = '__all__' 
+        exclude = ['host', 'participants']
