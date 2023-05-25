@@ -8,7 +8,9 @@ from django.contrib.auth import authenticate, login, logout
 #from django.contrib.auth.forms import UserCreationForm
 from .models import Room, Topic, Message, User
 from .forms import RoomForm, UserForm, MyUserCreationForm
-
+from base import data
+import numpy as np 
+import pandas as pd 
 # Create your views here.
 
 #rooms = [
@@ -217,3 +219,14 @@ def topicsPage(request):
 def activityPage(request):
     room_messages = Message.objects.all()
     return render(request, 'base/activity.html', {'room_messages':room_messages})
+
+
+def recommendation(request):
+    df1 = pd.read_csv("./base/data/tmdb_5000_movies.csv")
+    df1_head = df1.head(10)  # Get the first 10 rows of the DataFrame
+
+    context = {
+        'movies': df1_head.to_dict(orient='records')  # Convert DataFrame rows to a list of dictionaries
+    }
+
+    return render(request, 'base/recommendation.html', context)
