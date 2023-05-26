@@ -1,0 +1,22 @@
+{% extends 'main.html' %}
+
+{% block content %}
+  <!-- Recommendation Content -->
+  <h2>Movies</h2>
+
+  <ul>
+    {% for movie in movies %}
+    <li>
+      <h1>{{ movie.title }}</h1>
+      <p>Genre: {{ movie.genres }}</p>
+      <form action="{% url 'recommendation' %}" method="post">
+        {% csrf_token %}
+        <input type="hidden" name="movie.title" value="{{ movie.title }}">
+        <button type="submit" class="btn btn--main">
+          See similar Movies
+        </button>
+      </form>
+    </li>
+    {% endfor %}
+  </ul>
+{% endblock %}

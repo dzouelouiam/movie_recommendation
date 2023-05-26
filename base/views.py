@@ -11,6 +11,9 @@ from .forms import RoomForm, UserForm, MyUserCreationForm
 from base import data
 import numpy as np 
 import pandas as pd 
+from sklearn.feature_extraction.text import TfidfVectorizer
+import matplotlib.pyplot as plt
+from sklearn.metrics.pairwise import linear_kernel
 # Create your views here.
 
 #rooms = [
@@ -221,12 +224,56 @@ def activityPage(request):
     return render(request, 'base/activity.html', {'room_messages':room_messages})
 
 
-def recommendation(request):
-    df1 = pd.read_csv("./base/data/tmdb_5000_movies.csv")
-    df1_head = df1.head(10)  # Get the first 10 rows of the DataFrame
+# Reading ratings file
+ratings = pd.read_csv('/Users/dzouelouiam/Downloads/RecSystem/ratings.csv', sep='\t', encoding='latin-1', usecols=['user_id', 'movie_id', 'rating'])
 
+# Reading users file
+users = pd.read_csv('/Users/dzouelouiam/Downloads/RecSystem/users.csv', sep='\t', encoding='latin-1', usecols=['user_id', 'gender', 'zipcode', 'age_desc', 'occ_desc'])
+
+# Reading movies file
+movies = pd.read_csv('/Users/dzouelouiam/Downloads/RecSystem/movies.csv', sep='\t', encoding='latin-1', usecols=['movie_id', 'title', 'genres'])
+
+def moviesPage(request):
+    
+    movies_head = movies.head(10)  # Get the first 10 rows of the DataFrame
+    users_head = users.head(10)  # Get the first 10 rows of the DataFrame
+    ratings_head = ratings.head(10)  # Get the first 10 rows of the DataFrame
     context = {
-        'movies': df1_head.to_dict(orient='records')  # Convert DataFrame rows to a list of dictionaries
+        'movies': movies_head.to_dict(orient='records') , # Convert DataFrame rows to a list of dictionaries
+        'users': users_head.to_dict(orient='records'),  # Convert DataFrame rows to a list of dictionaries
+        'ratings': ratings_head.to_dict(orient='records')  # Convert DataFrame rows to a list of dictionaries
     }
 
-    return render(request, 'base/recommendation.html', context)
+    return render(request, 'base/moviesPage.html', context)
+
+
+def recommendation(request):
+        recommendation = []
+        movie_title = request.POST.get('movie.title')
+        dataset = pd.merge(pd.merge(movies, ratings),users)
+    # Break up the big genre string into a string array
+        movies['genres'] = movies['genres'].str.split('|')
+# Convert genres to string value
+        movies['genres'] = movies['genres'].fillna("").astype('str')
+        tf = TfidfVectorizer(analyzer='word',ngram_range=(1, 2),min_df=0, stop_words='english')
+        tfidf_matrix = tf.fit_transform(movies['genres'])
+        cosine_sim = linear_kernel(tfidf_matrix, tfidf_matrix)
+    # Build a 1-dimensional array with movie titles
+        titles = movies['title']
+        indices = pd.Series(movies.index, index=movies['title'])
+    # Function that get movie recommendations based on the cosine similarity score of movie genres
+        def genre_recommendations(title):
+            idx = indices[title]
+            sim_scores = list(enumerate(cosine_sim[idx]))
+            sim_scores = sorted(sim_scores, key=lambda x: x[1], reverse=True)
+            sim_scores = sim_scores[1:21]
+            movie_indices = [i[0] for i in sim_scores]
+            return titles.iloc[movie_indices].tolist()
+        # Call your recommendation algorithm using the clicked movie title
+        recommendation = genre_recommendations(movie_title)
+        print(recommendation)
+    
+        context = {
+            'recommendations': recommendation
+        }
+        return render(request, 'base/recommendation.html',context)

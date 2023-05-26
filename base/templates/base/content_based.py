@@ -8,6 +8,4 @@ from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 import csv
 
-def recommendation ():
-    dfl = pd.read_csv("/Users/dzouelouiam/Desktop/myproject/base/data/tmdb_5000_movies.csv")
-    dfl.head(10)
+

@@ -18,6 +18,7 @@ urlpatterns = [
     path('update-user/', views.updateUser, name="update-user"),
     path('topics/', views.topicsPage, name="topics"),
     path('activity/', views.activityPage, name="activity"),
+    path('movies/',views.moviesPage,name="movies"),
     path('recommendation/',views.recommendation,name="recommendation"),
 
 ]
