@@ -231,13 +231,13 @@ ratings = pd.read_csv('/Users/dzouelouiam/Downloads/RecSystem/ratings.csv', sep=
 users = pd.read_csv('/Users/dzouelouiam/Downloads/RecSystem/users.csv', sep='\t', encoding='latin-1', usecols=['user_id', 'gender', 'zipcode', 'age_desc', 'occ_desc'])
 
 # Reading movies file
-movies = pd.read_csv('/Users/dzouelouiam/Downloads/RecSystem/movies.csv', sep='\t', encoding='latin-1', usecols=['movie_id', 'title', 'genres'])
+movies = pd.read_csv('/Users/dzouelouiam/Downloads/moviesup.csv', sep='\t', encoding='latin-1', usecols=['movie_id', 'title', 'genres','image'])
 
 def moviesPage(request):
     
-    movies_head = movies.head(10)  # Get the first 10 rows of the DataFrame
-    users_head = users.head(10)  # Get the first 10 rows of the DataFrame
-    ratings_head = ratings.head(10)  # Get the first 10 rows of the DataFrame
+    movies_head = movies.head(50)  # Get the first 10 rows of the DataFrame
+    users_head = users.head(50)  # Get the first 10 rows of the DataFrame
+    ratings_head = ratings.head(50)  # Get the first 10 rows of the DataFrame
     context = {
         'movies': movies_head.to_dict(orient='records') , # Convert DataFrame rows to a list of dictionaries
         'users': users_head.to_dict(orient='records'),  # Convert DataFrame rows to a list of dictionaries
