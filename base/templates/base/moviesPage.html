@@ -2,13 +2,14 @@
 
 {% block content %}
   <!-- Recommendation Content -->
-  <h2>List Movies</h2>
 
   <div class="container">
+    <h2> List Movies</h2>
     <div class="movie-container">
       {% for movie in movies %}
       <div class="movie-box">
         <img class="movie-image" src="{{ movie.image }}" alt="{{ movie.title }}">
+
         <h1>{{ movie.title }}</h1>
         <p>Genre: {{ movie.genres }}</p>
         <form action="{% url 'recommendation' %}" method="post">

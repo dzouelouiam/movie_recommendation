@@ -21,4 +21,5 @@ urlpatterns = [
     path('movies/',views.moviesPage,name="movies"),
     path('recommendation/',views.recommendation,name="recommendation"),
 
+
 ]
