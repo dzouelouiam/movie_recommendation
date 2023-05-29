@@ -235,9 +235,9 @@ movies = pd.read_csv('/Users/dzouelouiam/Downloads/moviesup.csv', sep='\t', enco
 
 def moviesPage(request):
     
-    movies_head = movies.head(50)  # Get the first 10 rows of the DataFrame
-    users_head = users.head(50)  # Get the first 10 rows of the DataFrame
-    ratings_head = ratings.head(50)  # Get the first 10 rows of the DataFrame
+    movies_head = movies.head(50)  # Get the first 50 rows of the DataFrame
+    users_head = users.head(50)  # Get the first 50 rows of the DataFrame
+    ratings_head = ratings.head(50)  # Get the first 50 rows of the DataFrame
     context = {
         'movies': movies_head.to_dict(orient='records') , # Convert DataFrame rows to a list of dictionaries
         'users': users_head.to_dict(orient='records'),  # Convert DataFrame rows to a list of dictionaries
@@ -260,6 +260,7 @@ def recommendation(request):
         cosine_sim = linear_kernel(tfidf_matrix, tfidf_matrix)
     # Build a 1-dimensional array with movie titles
         titles = movies['title']
+        images = movies['image']
         indices = pd.Series(movies.index, index=movies['title'])
     # Function that get movie recommendations based on the cosine similarity score of movie genres
         def genre_recommendations(title):
@@ -268,12 +269,17 @@ def recommendation(request):
             sim_scores = sorted(sim_scores, key=lambda x: x[1], reverse=True)
             sim_scores = sim_scores[1:21]
             movie_indices = [i[0] for i in sim_scores]
-            return titles.iloc[movie_indices].tolist()
+            recommendations = []
+            for index in movie_indices:
+                recommendation = {'title': titles.iloc[index], 'image': images.iloc[index]}
+                recommendations.append(recommendation)
+            return recommendations
         # Call your recommendation algorithm using the clicked movie title
         recommendation = genre_recommendations(movie_title)
         print(recommendation)
     
         context = {
-            'recommendations': recommendation
+            'recommendations': recommendation,
+            'images': [rec['image'] for rec in recommendation]
         }
         return render(request, 'base/recommendation.html',context)

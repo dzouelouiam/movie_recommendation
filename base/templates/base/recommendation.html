@@ -1,14 +1,14 @@
 {% extends 'main.html' %}
 
 {% block content %}
-  <!-- Recommendation Content -->
+  <!-- Recommendation Content--> 
   <div class="container">
     <h2>Recommended Movies</h2>
 
     <div class="movie-container">
       {% for movie in recommendations %}
       <div class="movie-box">
-        <img class="movie-image" src="{{ movie.image }}" alt="{{ movie.title }}">
+        <img class="movie-image" src="{{movie.image}}" alt="{{ movie.title }}">
         <h1>{{ movie.title }}</h1>
       </div>
       {% endfor %}
