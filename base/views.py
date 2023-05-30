@@ -283,3 +283,61 @@ def recommendation(request):
             'images': [rec['image'] for rec in recommendation]
         }
         return render(request, 'base/recommendation.html',context)
+
+
+def searchByTitle(request):
+    if request.method == 'POST':
+        search_title = request.POST.get('search_title')
+        print(search_title)
+        
+        if search_title:
+            # Filter movies by title using a case-insensitive match
+            search_results = movies[movies['title'].str.contains(search_title, case=False)]
+        else:
+            search_results = movies
+        
+        context = {
+            'movies': search_results.to_dict(orient='records'),
+            'search_title': search_title
+        }
+
+        return render(request, 'base/resultsByTitle.html', context)
+
+    else:
+        movies_head = movies.head(10)  # Get the first 10 rows of the DataFrame
+
+        context = {
+            'movies': movies_head.to_dict(orient='records'),
+            'search_title': ''  # Set initial search_title value as empty string
+        }
+
+        return render(request, 'base/resultsByTitle.html', context)
+    
+    
+def searchByGenre(request):
+    if request.method == 'POST':
+        search_genre= request.POST.get('search_genre')
+        print(search_genre)
+        
+        if search_genre:
+            # Filter movies by title using a case-insensitive match
+            search_results = movies[movies['genres'].str.contains(search_genre, case=False)]
+        else:
+            search_results = movies
+        
+        context = {
+            'movies': search_results.to_dict(orient='records'),
+            'search_genre': search_genre
+        }
+
+        return render(request, 'base/moviesPage.html', context)
+
+    else:
+        movies_head = movies.head(10)  # Get the first 10 rows of the DataFrame
+
+        context = {
+            'movies': movies_head.to_dict(orient='records'),
+            'search_genre': ''  # Set initial search_title value as empty string
+        }
+
+        return render(request, 'base/resultsByGenre.html', context)

@@ -3,12 +3,58 @@
 {% block content %}
   <!-- Recommendation Content -->
 
-  <div class="container">
-    <h2> List Movies</h2>
+
+    <form class="header__search" action="{% url 'resultsByTitle' %}" method="post" >
+      
+      {% csrf_token %}
+      
+      <div class="container">
+
+        <div class="row">
+          <div class="col-lg-6 gutters-19">
+            <div class="form-group">
+              <input name="search_title" placeholder="Search for Movies..."  name="query" required>
+            </div>
+          </div>
+          <div class="col-lg-4 gutters-19">            
+          </div>
+        </div>
+      </div>
+    </form>
+    <form class="header__search" action="{% url 'resultsByGenre' %}" method="post" >     
+      {% csrf_token %}     
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-6 gutters-19">           
+              <!-- Add the code for the genre selection -->
+              <div class="form-group">
+                <select name="search_genre" required>
+                  <option value="Drama" disabled selected>Select a Genre</option>
+                  <option value="Action">Action</option>
+                  <option value="Adventure">Adventure</option>
+                  <option value="Comedy">Comedy</option>
+                  <option value="Fantasy">Fantasy</option>
+                  <option value="Romance">Romance</option>
+                  <option value="Animation">Animation</option>
+                  <option value="Animation">Children's</option>
+                  <!-- Add more options for different genres -->
+                </select>
+                <button type="submit" class="btn btn--main">
+                  Search 
+                </button>
+              </div>
+          </div>
+          <div class="col-lg-4 gutters-19">  
+          </div>
+        </div>
+      </div>
+    </form>
+ <div class="container">
     <div class="movie-container">
       {% for movie in movies %}
       <div class="movie-box">
         <img class="movie-image" src="{{ movie.image }}" alt="{{ movie.title }}">
+
         <h1>{{ movie.title }}</h1>
         <p>Genre: {{ movie.genres }}</p>
         <form action="{% url 'recommendation' %}" method="post">
@@ -22,4 +68,5 @@
       {% endfor %}
     </div>
   </div>
+</div>
 {% endblock %}

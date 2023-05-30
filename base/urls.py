@@ -20,6 +20,8 @@ urlpatterns = [
     path('activity/', views.activityPage, name="activity"),
     path('movies/',views.moviesPage,name="movies"),
     path('recommendation/',views.recommendation,name="recommendation"),
+    path('searchByTitle',views.searchByTitle,name="resultsByTitle"),
+    path('searchByGenre',views.searchByGenre,name="resultsByGenre"),
 
 
 ]
