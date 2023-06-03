@@ -37,6 +37,9 @@
                   <option value="Romance">Romance</option>
                   <option value="Animation">Animation</option>
                   <option value="Animation">Children's</option>
+                  <option value="Animation">Musical</option>
+                  <option value="Animation">Sci-Fiction</option>
+
                   <!-- Add more options for different genres -->
                 </select>
                 <button type="submit" class="btn btn--main">
@@ -56,7 +59,7 @@
         <img class="movie-image" src="{{ movie.image }}" alt="{{ movie.title }}">
 
         <h1>{{ movie.title }}</h1>
-        <p>Genre: {{ movie.genres }}</p>
+        <p>{{ movie.genres }}</p>
         <form action="{% url 'recommendation' %}" method="post">
           {% csrf_token %}
           <input type="hidden" name="movie.title" value="{{ movie.title }}">
