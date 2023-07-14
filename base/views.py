@@ -72,7 +72,7 @@ def registerPage(request):
             login(request, user)
             return redirect('home')
         else:
-            messages.error(request, 'An error occured during registration')
+            messages.error(request, ' Your password must have at least 8 characters long 1 uppercase & 1 lowercase character 1 number ')
 
     return render(request,'base/login_register.html',{'form' : form})
 
